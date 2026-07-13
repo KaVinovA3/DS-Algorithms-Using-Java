@@ -1,37 +1,46 @@
 package com.techcrack.dsa.graph;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class TopologicalSort {
-    private static void topologicalSort(List<List<Integer>> adjList) {
-        Stack<Integer> stack = new Stack<>();
+    private static int[] topologicalSort(List<List<Integer>> adj) {
+        boolean[] visited = new boolean[adj.size()];
+        Deque<Integer> stack = new ArrayDeque<>();
 
-        int n = adjList.size();
-        boolean[] isVisited = new boolean[n];
-
-        for (int i = 0; i < n; i++) {
-            if (! isVisited[i]) {
-                isVisited[i] = true;
-                dfs(adjList, isVisited, stack, i);
-                stack.push(i);
+        for (int i = 0; i < adj.size(); ++i) {
+            if (!visited[i]) {
+                dfs(
+                        adj,
+                        visited,
+                        stack,
+                        i
+                );
             }
         }
 
-        while (! stack.isEmpty()) {
-            System.out.print(stack.pop() + " ");
+        int[] res = new int[stack.size()];
+
+        for (int i = 0; i < res.length; ++i) {
+            res[i] = stack.pop();
         }
+
+        return res;
     }
+    private static void dfs(List<List<Integer>> adjList, boolean[] visited, Deque<Integer> stack, int node) {
+        visited[node] = true;
 
-    private static void dfs(List<List<Integer>> adjList, boolean[] isVisited, Stack<Integer> stack, int node) {
-        for (Integer ad : adjList.get(node)) {
-            if (! isVisited[ad]) {
-                isVisited[ad] = true;
-                dfs(adjList, isVisited, stack, ad);
-                stack.push(ad);
+        for (int neighbour : adjList.get(node)) {
+            if (!visited[neighbour]) {
+                dfs(
+                        adjList,
+                        visited,
+                        stack,
+                        neighbour
+                );
             }
         }
+
+        stack.push(node);
     }
 
     public static void main(String[] args) {
@@ -46,8 +55,8 @@ public class TopologicalSort {
         adj.get(4).add(0);
         adj.get(4).add(1);
         adj.get(5).add(0);
-        adj.get(5).add(2);
+//        adj.get(5).add(2);
 
-        topologicalSort(adj);
+        System.out.println(Arrays.toString(topologicalSort(adj)));
     }
 }

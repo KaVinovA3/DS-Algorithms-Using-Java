@@ -1,14 +1,6 @@
 package com.techcrack.leetcode;
 
-class ListNode{
-    int val;
-    ListNode head=null;
-    ListNode next;
-    ListNode(int val){
-        this.val=val;
-    }
-    ListNode(){}
-}
+
 public class MergeTwoSortedList {
     ListNode head=null;
     ListNode lastIndex=null;

@@ -88,5 +88,7 @@ public class AVL {
         System.out.println(head.getValue() + " Height of : " + head.height);
 
         avl.viewTree(head, "");
+        
+        Math.abs(1L);
     }
 }

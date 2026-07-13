@@ -20,8 +20,6 @@ public class BurnTree {
             for (int i = 1; i <= size; ++i) {
                 var node = queue.poll();
 
-                if (node == null ) continue;
-
                 isVisited.add(node);
                 TreeNode parent = parents.get(node);
 
