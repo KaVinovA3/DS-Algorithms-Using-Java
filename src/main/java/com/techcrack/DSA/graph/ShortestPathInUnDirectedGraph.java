@@ -11,7 +11,7 @@ class ShortestPathInUnDirectedGraph {
         
         int[] dist = new int[adj.size()];
         
-        Arrays.fill(dist, Integer.MAX_VALUE);
+        Arrays.fill(dist, -1);
         
         dist[src] = 0;
         
@@ -20,16 +20,16 @@ class ShortestPathInUnDirectedGraph {
             int distance = dist[node];
             
             for (Integer ad : adj.get(node)) {
-                if (distance + 1 < dist[ad]) {
+                if (dist[ad] == -1) {
                     dist[ad] = distance + 1;
                     queue.add(ad);
                 }
             }
         }
         
-        for (int i = 0; i < dist.length; i++) {
-            if (dist[i] == Integer.MAX_VALUE) dist[i] = -1;
-        }
+//        for (int i = 0; i < dist.length; i++) {
+//            if (dist[i] == Integer.MAX_VALUE) dist[i] = -1;
+//        }
         
         return dist;
     }

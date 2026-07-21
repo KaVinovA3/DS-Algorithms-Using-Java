@@ -21,21 +21,21 @@ public class ShortestPath {
     public int[] shortestPath(int[][] edges, int N, int M) {
         List<List<Integer>> adjList = buildGraph(edges, N);
 
-        System.out.println(adjList);
         int[] ans = new int[N];
-        Queue<int[]> queue = new ArrayDeque<>();
+        Queue<Integer> queue = new ArrayDeque<>();
 
-        queue.offer(new int[]{0, 0});
+        queue.offer(0);
         Arrays.fill(ans, -1);
+        ans[0] = 0;
 
         while (!queue.isEmpty()) {
-            int[] node = queue.poll();
 
-            ans[node[0]] = node[1];
+            int node = queue.poll();
 
-            for (int neighbour : adjList.get(node[0])) {
+            for (int neighbour : adjList.get(node)) {
                 if (ans[neighbour] == -1) {
-                    queue.offer(new int[]{neighbour, node[1] + 1});
+                    ans[neighbour] = ans[node] + 1;
+                    queue.offer(neighbour);
                 }
             }
         }
