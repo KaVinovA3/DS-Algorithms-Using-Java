@@ -1,81 +1,65 @@
 package com.techcrack.dsa.graph;
 
-public class DisJointSet {
-    private final int[] rank;
-    private final int[] parent;
-    private final int[] size;
+public class DisjointSet {
+    private final int[] parent, size, rank;
 
-    public DisJointSet(int n) {
-        rank = new int[n + 1];
+    public DisjointSet(int n) {
+        this.parent = new int[n + 1];
+        this.size = new int[n + 1];
+        this.rank = new int[n + 1];
 
-        parent = new int[n + 1];
-        size = new int[n + 1];
-        for (int i = 1; i <= n; i++) {
-            parent[i] = i;
+        initialize(n);
+    }
+
+    public void initialize(int n) {
+        for (int i = 1; i <= n; ++i) {
+            rank[i] = 0;
             size[i] = 1;
+            parent[i] = i;
         }
     }
 
-    public int getParent(int node) {
-        if (node == parent[node]) return node;
-        return getParent(parent[node]);
+
+    public boolean find(int u, int v) {
+        return find(u) == find(v);
+    }
+
+    public int find(int node) {
+        if (node == parent[node]) {
+            return node;
+        }
+
+        return parent[node] = find(parent[node]);
     }
 
     public void unionByRank(int u, int v) {
-        int uParent = getParent(u);
-        int vParent = getParent(v);
+        int pu = find(u);
+        int pv = find(v);
 
-        if (uParent == vParent) return;
+        if (pu == pv) return;
 
-        if (rank[uParent] < rank[vParent])
-            parent[uParent] = vParent;
-        else if (rank[vParent] < rank[uParent])
-            parent[vParent] = vParent;
-        else {
-            parent[vParent] = uParent;
-            rank[uParent] += 1;
+        if (rank[pu] > rank[pv]) {
+            parent[pv] = pu;
+        } else if (rank[pu] < rank[pv]) {
+            parent[pu] = pv;
+        } else {
+            parent[pu] = pv;
+            rank[pv]++;
         }
     }
 
     public void unionBySize(int u, int v) {
-        int uParent = getParent(u);
-        int vParent = getParent(v);
+        int pu = find(u);
+        int pv = find(v);
 
-        if (uParent == vParent) return;
+        if (pu == pv) return;
 
-        if (size[uParent] < size[vParent]) {
-            parent[uParent] = parent[vParent];
-            size[vParent] += size[uParent];
+        if (size[pu] > size[pv]) {
+            parent[pv] = pu;
+            size[pu] += size[pv];
+        } else {
+            parent[pu] = pv;
+            size[pv] += size[pu];
         }
-        else if (size[vParent] < size[uParent]) {
-            parent[vParent] = parent[uParent];
-            size[uParent] += size[vParent];
-        }
-        else {
-            parent[vParent] = parent[uParent];
-            size[uParent] += size[vParent];
-        }
-    }
-
-    public static void main(String[] args) {
-        DisJointSet ds = new DisJointSet(7);
-        ds.unionBySize(1, 2);
-        ds.unionBySize(2, 3);
-        ds.unionBySize(4, 5);
-        ds.unionBySize(6, 7);
-        ds.unionBySize(5, 6);
-
-        if (ds.getParent(3) == ds.getParent(7)) {
-            System.out.println("Belongs to same component...");
-        }
-        else {
-            System.out.println("Belongs to different component...");
-        }
-
-        ds.unionByRank(3, 7);
-        if (ds.getParent(3) == ds.getParent(7))
-            System.out.println("Belongs to same component...");
-        else
-            System.out.println("Belongs to different component...");
     }
 }
